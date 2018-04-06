@@ -8,3 +8,7 @@ tables:
     - name: ele
       key: ele
       type: integer
+    mapping:
+      contour:
+      - elevation
+    type: linestring
