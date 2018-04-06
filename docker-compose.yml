@@ -12,21 +12,6 @@ services:
     ports:
      - "5432"
     env_file: .env
-  import-natural-earth:
-    image: "openmaptiles/import-natural-earth:1.4"
-    env_file: .env
-    networks:
-    - postgres_conn
-  import-water:
-    image: "openmaptiles/import-water:0.6"
-    env_file: .env
-    networks:
-    - postgres_conn
-  import-lakelines:
-    image: "openmaptiles/import-lakelines:1.0"
-    env_file: .env
-    networks:
-    - postgres_conn
   import-osm:
     image: "openmaptiles/import-osm:0.5"
     env_file: .env
@@ -38,11 +23,6 @@ services:
      - ./data:/import
      - ./build:/mapping
      - cache:/cache
-  import-osmborder:
-    image: "openmaptiles/import-osmborder:0.4"
-    env_file: .env
-    networks:
-    - postgres_conn
   import-osm-diff:
     image: "openmaptiles/import-osm:0.4"
     env_file: .env
@@ -74,14 +54,6 @@ services:
     - postgres_conn
     volumes:
      - ./build:/sql
-  import-wikidata:
-    image: "openmaptiles/import-wikidata:0.1"
-    env_file: .env
-    command: import-wikidata
-    networks:
-    - postgres_conn
-    volumes:
-     - ./wikidata:/import
   openmaptiles-tools:
     image: "openmaptiles/openmaptiles-tools:0.8"
     env_file: .env

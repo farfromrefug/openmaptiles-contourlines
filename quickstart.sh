@@ -164,6 +164,9 @@ if [ !  -f ./data/${testdata} ]; then
     exit 404
 fi
 
+rm ./data/*.pbf
+cp ~/Downloads/ile-de-france_contours.osm.pbf ./data/
+
 echo " "
 echo "-------------------------------------------------------------------------------------"
 echo "====> : Remove old generated source files ( ./build/* ) ( if they exist ) "
@@ -192,38 +195,6 @@ make forced-clean-sql
 
 echo " "
 echo "-------------------------------------------------------------------------------------"
-echo "====> : Start importing water data from http://openstreetmapdata.com into PostgreSQL "
-echo "      : Source code:  https://github.com/openmaptiles/import-water "
-echo "      : Data license: http://openstreetmapdata.com/info/license  "
-echo "      : Thank you: http://openstreetmapdata.com/info/supporting "
-docker-compose run --rm import-water
-
-echo " "
-echo "-------------------------------------------------------------------------------------"
-echo "====> : Start importing border data from http://openstreetmap.org into PostgreSQL "
-echo "      : Source code:  https://github.com/openmaptiles/import-osmborder"
-echo "      : Data license: http://www.openstreetmap.org/copyright"
-echo "      : Thank you: https://github.com/pnorman/osmborder "
-docker-compose run --rm import-osmborder
-
-echo " "
-echo "-------------------------------------------------------------------------------------"
-echo "====> : Start importing  http://www.naturalearthdata.com  into PostgreSQL "
-echo "      : Source code: https://github.com/openmaptiles/import-natural-earth "
-echo "      : Terms-of-use: http://www.naturalearthdata.com/about/terms-of-use  "
-echo "      : Thank you: Natural Earth Contributors! "
-docker-compose run --rm import-natural-earth
-
-echo " "
-echo "-------------------------------------------------------------------------------------"
-echo "====> : Start importing OpenStreetMap Lakelines data "
-echo "      : Source code: https://github.com/openmaptiles/import-lakelines "
-echo "      :              https://github.com/lukasmartinelli/osm-lakelines "
-echo "      : Data license: .. "
-docker-compose run --rm import-lakelines
-
-echo " "
-echo "-------------------------------------------------------------------------------------"
 echo "====> : Start importing OpenStreetMap data: ./data/${testdata} -> imposm3[./build/mapping.yaml] -> PostgreSQL"
 echo "      : Imposm3 documentation: https://imposm.org/docs/imposm3/latest/index.html "
 echo "      :   Thank you Omniscale! "
@@ -231,14 +202,6 @@ echo "      :   Source code: https://github.com/openmaptiles/import-osm "
 echo "      : The OpenstreetMap data license: https://www.openstreetmap.org/copyright (ODBL) "
 echo "      : Thank you OpenStreetMap Contributors ! "
 docker-compose run --rm import-osm
-
-echo " "
-echo "-------------------------------------------------------------------------------------"
-echo "====> : Start importing Wikidata: ./wikidata/latest-all.json.gz -> PostgreSQL"
-echo "      : Source code: https://github.com/openmaptiles/import-wikidata "
-echo "      : The Wikidata license: https://www.wikidata.org/wiki/Wikidata:Database_download/en#License "
-echo "      : Thank you Wikidata Contributors ! "
-docker-compose run --rm import-wikidata
 
 echo " "
 echo "-------------------------------------------------------------------------------------"
@@ -276,6 +239,11 @@ echo "--------------------------------------------------------------------------
 echo "====> : Add special metadata to mbtiles! "
 docker-compose run --rm openmaptiles-tools  generate-metadata ./data/tiles.mbtiles
 docker-compose run --rm openmaptiles-tools  chmod 666         ./data/tiles.mbtiles
+
+echo " "
+echo "-------------------------------------------------------------------------------------"
+echo "====> : Stop postserve service "
+docker-compose stop postserve
 
 echo " "
 echo "-------------------------------------------------------------------------------------"

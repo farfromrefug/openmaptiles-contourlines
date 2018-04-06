@@ -1,0 +1,10 @@
+tables:
+  # etldoc: imposm3 -> osm_contour
+  contour:
+    type: linestring
+    fields:
+    - name: geometry
+      type: geometry
+    - name: ele
+      key: ele
+      type: integer
