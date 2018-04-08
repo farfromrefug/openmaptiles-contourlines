@@ -42,6 +42,29 @@ This will generate a new elevation mbtiles set of all France area... Quite long!
 
 Try first with a small area.
 
+### Results
+
+You'll end up if everything works with a file tiles.mbtiles in data directory.
+
+This file contains all vectors tiles with contour layer over your selected area.
+
+Contours lines step is configured to 10m. 
+
+Ex: I ran it with "ile-de-france", the area around Paris, France.
+
+Launch a tile server locally to test your data
+
+```
+make start-tileserver
+```
+
+and check at http://127.0.0.1:8080/ the raw result (click on inspect link on DATA section)
+
+Result:
+![alt text](https://raw.githubusercontent.com/RomainQuidet/openmaptiles/contours/ile-de-france.png "ile-de-france raw elevation contours")
+
+Ile-de-france build took around 5 min, while French Alps area required around 40 min on my old 2013 iMac.
+
 ## TODO
 
 Once you've got your tiles, you'll need to create a mapbox sytle to serve them from a mapbox tile server.
