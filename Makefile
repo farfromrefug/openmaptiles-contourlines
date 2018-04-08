@@ -106,6 +106,14 @@ import-sql-dev:
 import-osm-dev:
 	docker-compose run --rm import-osm /bin/bash
 
+generate-osm-contours:
+	docker-compose run --rm generate-osm-contours
+
+generate-osm-file-stats:
+	@echo stats file $(file) from ${area}
+	docker-compose run --rm import-osm /bin/bash -c "cd /import; rm *.txt; osmconvert --out-statistics ${file} > ./osmstat.txt"
+	./pbfStats.sh ${area}
+
 download-geofabrik:
 	@echo ===============  download-geofabrik =======================
 	@echo Download area :   $(area)
@@ -116,6 +124,15 @@ download-geofabrik:
 	@echo "Generated config file: ./data/docker-compose-config.yml"
 	@echo " "
 	cat ./data/docker-compose-config.yml
+	@echo " "
+
+download-geofabrik-poly:
+	@echo ===============  download-geofabrik-poly  =======================
+	@echo Download poly :   $(area)
+	@echo [[ example: make download-geofabrik-poly  area=albania ]]
+	@echo [[ list areas:  make download-geofabrik-list       ]]
+	docker-compose run --rm import-osm /bin/bash -c "cd /import; download-geofabrik update; download-geofabrik -v download -p $(area)"
+	ls -la ./data/$(area).*
 	@echo " "
 
 # the `download-geofabrik` error message mention `list`, if the area parameter is wrong. so I created a similar make command

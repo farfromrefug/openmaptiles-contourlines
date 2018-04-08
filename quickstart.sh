@@ -27,7 +27,8 @@ if [ $# -eq 0 ]; then
 else
     osm_area=$1
 fi
-testdata=${osm_area}.osm.pbf
+testpolyfile=${osm_area}.poly
+testdata="osm_data_to_be_generated"
 
 ##  Min versions ...
 MIN_COMPOSE_VER=1.7.1
@@ -133,39 +134,72 @@ mkdir -p wikidata
 
 echo " "
 echo "-------------------------------------------------------------------------------------"
-echo "====> : Removing old MBTILES if exists ( ./data/*.mbtiles ) "
+echo "====> : Removing old PBF and MBTILES if exists ( ./data/*.mbtiles, ./data/*.pbf) "
 rm -f ./data/*.mbtiles
+rm -f ./data/*.pbf
 
-if [ !  -f ./data/${testdata} ]; then
+if [ !  -f ./data/${testpolyfile} ]; then
     echo " "
     echo "-------------------------------------------------------------------------------------"
-    echo "====> : Downloading testdata $testdata   "
+    echo "====> : Downloading poly $testpolyfile   "
     rm -f ./data/*
-    #wget $testdataurl  -P ./data
-    make download-geofabrik      area=${osm_area}
-    echo " "
-    echo "-------------------------------------------------------------------------------------"
-    echo "====> : Osm metadata : $testdata   "
-    cat ./data/osmstat.txt
-    echo " "
-    echo "-------------------------------------------------------------------------------------"
-    echo "====> : Generated docker-compose config  "
-    cat ./data/docker-compose-config.yml
+    make download-geofabrik-poly      area=${osm_area}
 else
     echo " "
     echo "-------------------------------------------------------------------------------------"
-    echo "====> : The testdata ./data/$testdata exists, we don't need to download! "
+    echo "====> : The poly file ./data/$testpolyfile exists, we don't need to download! "
 fi
 
-
-if [ !  -f ./data/${testdata} ]; then
+if [ !  -f ./data/${testpolyfile} ]; then
     echo " "
-    echo "Missing ./data/$testdata , Download or Parameter error? "
+    echo "Missing ./data/$testpolyfile , Download or Parameter error? "
     exit 404
 fi
 
-rm ./data/*.pbf
-cp ~/Downloads/ile-de-france_contours.osm.pbf ./data/
+earthexplorerCredentialsFile=.earthexplorerCredentials
+if [ !  -f ./${earthexplorerCredentialsFile} ]; then
+    echo " "
+    echo "-------------------------------------------------------------------------------------"
+    echo "Missing ./$earthexplorerCredentialsFile file , you must create one to be able to download contours data"
+    echo "File content must follow this format:"
+    echo "USER=xxxxx"
+    echo "PASSWORD=xxxxx"
+    echo " "
+    echo "If you do not yet have an earthexplorer login, visit https://ers.cr.usgs.gov/register/ and create one"
+    exit 0
+fi
+
+echo " "
+echo "-------------------------------------------------------------------------------------"
+echo "====> : Start generating OSM contours file"
+echo "      : Phyghtmap documentation: http://katze.tfiu.de/projects/phyghtmap/phyghtmap.1.html "
+echo "      :   Thank you Phyghtmap! "
+echo "      :   Source code: https://github.com/openmaptiles/import-osm "
+docker-compose run generate-osm-contours
+
+if [ "$(ls -A ./data/*.pbf 2> /dev/null)" ]; then
+    for generated_file in ./data/*.pbf; do
+        testdata="$(basename $generated_file)"
+        break
+    done
+fi
+
+if [ !  -f ./data/${testdata} ]; then
+    echo " "
+    echo "Missing ./data/$testdata , generation error? "
+    exit 404
+fi
+
+
+make generate-osm-file-stats file=${testdata} area=${osm_area}
+echo " "
+echo "-------------------------------------------------------------------------------------"
+echo "====> : Osm metadata : $testdata   "
+cat ./data/osmstat.txt
+echo " "
+echo "-------------------------------------------------------------------------------------"
+echo "====> : Generated docker-compose config  "
+cat ./data/docker-compose-config.yml
 
 echo " "
 echo "-------------------------------------------------------------------------------------"

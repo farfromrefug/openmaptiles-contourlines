@@ -3,6 +3,11 @@ volumes:
   pgdata:
   cache:
 services:
+  generate-osm-contours:
+    image: "romainquidet/generate-osm-contours:1.0"
+    env_file: .earthexplorerCredentials
+    volumes:
+     - ./data:/import
   postgres:
     image: "openmaptiles/postgis:2.9"
     volumes:

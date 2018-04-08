@@ -16,3 +16,7 @@ wikidata/*
 
 # generated source files
 build/*
+
+# Earthexplorer credentials
+.earthexplorerCredentials
+
