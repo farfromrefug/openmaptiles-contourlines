@@ -20,7 +20,8 @@ If you are here you already know git and have cloned this repo!
 ### Register
 
 You'll need to register to https://ers.cr.usgs.gov/register/ in order to allow phyghtmap to download elevation data. It's free.
-Once you have your user and login, create a file named .earthexplorerCredentials  in the root directory of the repo with the content:
+
+Once you have your user and login, create a file named .earthexplorerCredentials in the root directory of the repo with the content:
 
 ```
 USER=your_user_name
