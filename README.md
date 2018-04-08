@@ -1,6 +1,7 @@
 ## OpenContourMapTiles 
 
-OpenContourMapTiles is a small fork of [openmaptiles.org](http://openmaptiles.org/) to generate in one command line elevation contours vector tiles.
+OpenContourMapTiles is a small fork of [openmaptiles.org](http://openmaptiles.org/) to generate in one command line elevation contours vector tiles
+thanks to [phyghtmap tool](http://katze.tfiu.de/projects/phyghtmap/).
 
 Read the OpenMapTiles doc to get used about their toolchain, how to install, use it etc.
 
@@ -18,7 +19,7 @@ If you are here you already know git and have cloned this repo!
 
 ### Register
 
-You'll need to register to https://ers.cr.usgs.gov/register/ in order to get elevation data. It's free.
+You'll need to register to https://ers.cr.usgs.gov/register/ in order to allow phyghtmap to download elevation data. It's free.
 Once you have your user and login, create a file named .earthexplorerCredentials  in the root directory of the repo with the content:
 
 ```
