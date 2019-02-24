@@ -16,6 +16,9 @@ Preview
 **Zoom level 12**
 ![zoom 12](previews/zoom-12.png)
 
+**Zoom level 14**
+![zoom 12](previews/zoom-14.png)
+
 Using
 -----
 
