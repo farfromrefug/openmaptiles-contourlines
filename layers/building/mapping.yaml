@@ -2,7 +2,7 @@ generalized_tables:
   # etldoc: imposm3 -> osm_building_polygon_gen1
   building_polygon_gen1:
     source: building_polygon
-    sql_filter: area>power(ZRES12,2)
+    sql_filter: area>power(ZRES12,2) AND ST_IsValid(geometry)
     tolerance: ZRES14
 
 tables:
@@ -60,6 +60,7 @@ tables:
       reject:
         building: ["no","none","No"]
         building:part: ["no","none","No"]
+        man_made: ["bridge"]
     type: polygon
 
   # etldoc: imposm3 -> osm_building_street
@@ -392,4 +393,5 @@ tables:
       reject:
         building: ["no","none","No"]
         building:part: ["no","none","No"]
+        man_made: ["bridge"]
     type: relation_member
