@@ -6,9 +6,11 @@ layer:
   fields:
       ele: |
         elevation above the sea in meters
+      index: |
+        The index field can be used to emphasize index contours, but it can also be used to reduce the contour density if you wish. The highest value that applies to a contour will be the index value, so if you want to highlight every fifth line, you need to select both index=5 and index=10. If you want to highlight every other line, you need to select both index=2 and index=10 (or both index=1 and index=5).
   datasource:
     geometry_field: geometry
-    query: (SELECT geometry, ele FROM layer_contour(!bbox!, z(!scale_denominator!))) AS t
+    query: (SELECT geometry, ele, index FROM layer_contour(!bbox!, z(!scale_denominator!))) AS t
 schema:
   - ./contour.sql
 datasources:
